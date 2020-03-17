@@ -1,6 +1,7 @@
 package gluaspider
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -64,6 +65,21 @@ func (s *spider) NewDocumentFromString(l *lua.LState) int {
 	return s.newDocumentFromString(l, l.CheckString(1))
 }
 
+// Regexp
+func (s *spider) Regexp(l *lua.LState) int {
+	reg, err := regexp.Compile(l.CheckString(1))
+
+	if err != nil {
+		l.Push(lua.LBool(false))
+
+		return 1
+	}
+
+	l.Push(lua.LBool(reg.MatchString(l.CheckString(2))))
+
+	return 1
+}
+
 // Loader Loader
 func (s *spider) Loader(l *lua.LState) int {
 	// register functions to the table
@@ -71,6 +87,7 @@ func (s *spider) Loader(l *lua.LState) int {
 		"RestyClient":           s.RestyClient,
 		"NewDocumentFromString": s.NewDocumentFromString,
 		"Get":                   s.Get,
+		"Regexp":                s.Regexp,
 	})
 
 	// returns the module
