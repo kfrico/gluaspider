@@ -10,24 +10,24 @@ import (
 	"layeh.com/gopher-luar"
 )
 
-// spider type
-type spider struct {
+// Spider type
+type Spider struct {
 	restyClient *resty.Client
 }
 
 // NewSpider NewSpider
-func NewSpider() *spider {
-	return &spider{
+func NewSpider() *Spider {
+	return &Spider{
 		restyClient: resty.New(),
 	}
 }
 
-func (s *spider) SetProxy(url string) {
+func (s *Spider) SetProxy(url string) {
 	s.restyClient.SetProxy(url)
 }
 
 // Get Simple Get Url
-func (s *spider) Get(l *lua.LState) int {
+func (s *Spider) Get(l *lua.LState) int {
 	resp, err := s.restyClient.R().Get(l.CheckString(1))
 
 	if err != nil {
@@ -41,14 +41,14 @@ func (s *spider) Get(l *lua.LState) int {
 }
 
 // RestyClient Get RestyClient
-func (s *spider) RestyClient(l *lua.LState) int {
+func (s *Spider) RestyClient(l *lua.LState) int {
 	l.Push(luar.New(l, s.restyClient))
 
 	return 1
 }
 
 // newDocumentFromString New Goquery Document From String
-func (s *spider) newDocumentFromString(l *lua.LState, html string) int {
+func (s *Spider) newDocumentFromString(l *lua.LState, html string) int {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 
 	if err != nil {
@@ -65,12 +65,12 @@ func (s *spider) newDocumentFromString(l *lua.LState, html string) int {
 }
 
 // NewDocumentFromString New Goquery Document From String
-func (s *spider) NewDocumentFromString(l *lua.LState) int {
+func (s *Spider) NewDocumentFromString(l *lua.LState) int {
 	return s.newDocumentFromString(l, l.CheckString(1))
 }
 
 // Regexp
-func (s *spider) Regexp(l *lua.LState) int {
+func (s *Spider) Regexp(l *lua.LState) int {
 	reg, err := regexp.Compile(l.CheckString(1))
 
 	if err != nil {
@@ -85,7 +85,7 @@ func (s *spider) Regexp(l *lua.LState) int {
 }
 
 // Loader Loader
-func (s *spider) Loader(l *lua.LState) int {
+func (s *Spider) Loader(l *lua.LState) int {
 	// register functions to the table
 	mod := l.SetFuncs(l.NewTable(), map[string]lua.LGFunction{
 		"RestyClient":           s.RestyClient,
