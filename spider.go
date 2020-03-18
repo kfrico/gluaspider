@@ -22,6 +22,10 @@ func NewSpider() *spider {
 	}
 }
 
+func (s *spider) SetProxy(url string) {
+	s.restyClient.SetProxy(url)
+}
+
 // Get Simple Get Url
 func (s *spider) Get(l *lua.LState) int {
 	resp, err := s.restyClient.R().Get(l.CheckString(1))
