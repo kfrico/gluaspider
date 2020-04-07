@@ -22,6 +22,11 @@ func NewSpider() *Spider {
 	}
 }
 
+// GetRestyClient Get RestyClient
+func (s *Spider) GetRestyClient() *resty.Client {
+	return s.restyClient
+}
+
 func (s *Spider) SetProxy(url string) {
 	s.restyClient.SetProxy(url)
 }
