@@ -6,6 +6,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-resty/resty/v2"
+	"github.com/tidwall/gjson"
 	"github.com/yuin/gopher-lua"
 	"layeh.com/gopher-luar"
 )
@@ -89,6 +90,15 @@ func (s *Spider) Regexp(l *lua.LState) int {
 	return 1
 }
 
+// ParseJson
+func (s *Spider) ParseJson(l *lua.LState) int {
+	r := gjson.Parse(l.CheckString(1))
+
+	l.Push(luar.New(l, r))
+
+	return 1
+}
+
 // Loader Loader
 func (s *Spider) Loader(l *lua.LState) int {
 	// register functions to the table
@@ -97,6 +107,7 @@ func (s *Spider) Loader(l *lua.LState) int {
 		"NewDocumentFromString": s.NewDocumentFromString,
 		"Get":                   s.Get,
 		"Regexp":                s.Regexp,
+		"ParseJson":             s.ParseJson,
 	})
 
 	// returns the module
